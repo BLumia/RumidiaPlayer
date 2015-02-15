@@ -29,15 +29,18 @@ public:
     QString getCurTime();
     QString getSFName();
     QString getSFLoaded();
+    double getMidiBPM();
     bool getPlayState();
     void ApplyTempo(bool reset = false);
     void SetTempo(int pos);
     void setVol(int vol);
     void SetPos(int pos);
+    void DBGSetTempo(int pos);
 
     //HSTREAM chan;		// channel handle
     HSOUNDFONT font;	// soundfont
     //int miditempo;		// MIDI file tempo
+    int actualMidiTempo;    // 实际的Tempo
     //float temposcale=1;	// tempo adjustment
 
 private:

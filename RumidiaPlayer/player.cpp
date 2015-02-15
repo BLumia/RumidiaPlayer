@@ -42,11 +42,20 @@ QString Player::LoadMidiFile(QString file)
         return "Error_Open_File";
         // override the initial tempo, and set a sync to override tempo events and another to override after seeking
         ApplyTempo(true);
+        actualMidiTempo = BASS_MIDI_StreamGetEvent(chan,0,MIDI_EVENT_TEMPO);
         BASS_ChannelSetSync(chan,BASS_SYNC_MIDI_EVENT|BASS_SYNC_MIXTIME,MIDI_EVENT_TEMPO,TempoSync,0);
         BASS_ChannelSetSync(chan,BASS_SYNC_SETPOS|BASS_SYNC_MIXTIME,0,TempoSync,0);
     }
     //BASS_ChannelPlay(chan,FALSE);
     return "It_Is_Done";
+}
+
+double Player::getMidiBPM(){
+    if (chan) {
+        int tempo = BASS_MIDI_StreamGetEvent(chan,0,MIDI_EVENT_TEMPO);
+        return (double)60000000/(tempo*1);
+    }
+    return -1.0;
 }
 
 int Player::getPlayProgress(){
@@ -103,6 +112,8 @@ void Player::ApplyTempo(bool reset)
 {
     if (reset) { // 如果重置则取得tempo并重置
         miditempo = BASS_MIDI_StreamGetEvent(chan,0,MIDI_EVENT_TEMPO);
+    } else {
+        miditempo = actualMidiTempo;
     }
     BASS_MIDI_StreamEvent(chan,0,MIDI_EVENT_TEMPO,miditempo*temposcale); // set tempo
 }
@@ -181,7 +192,7 @@ QString Player::getSFLoaded(){
 
 void Player::SetTempo(int pos){
     temposcale=1/((30-pos)/20.f); // up to +/- 50% bpm
-    ApplyTempo(); // apply the tempo adjustment
+    ApplyTempo(false); // apply the tempo adjustment
 }
 
 void Player::setNOFX(bool isEnabled){
@@ -206,4 +217,10 @@ void Player::setVol(int vol)
 bool Player::isSFLoaded(){
     if (font) return true;
     else return false;
+}
+
+void Player::DBGSetTempo(int pos){
+    temposcale=1/((30-pos)/20.f); // up to +/- 50% bpm
+    miditempo = actualMidiTempo;
+    BASS_MIDI_StreamEvent(chan,0,MIDI_EVENT_TEMPO,miditempo*temposcale);
 }

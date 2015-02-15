@@ -45,12 +45,13 @@ public:
     QCheckBox *NOFXCheckBox;
     QLCDNumber *lcdNumber;
     SPSlider *volSlider;
+    QPushButton *dbgBtn;
 
     void setupUi(QMainWindow *RumidiaPlayer)
     {
         if (RumidiaPlayer->objectName().isEmpty())
             RumidiaPlayer->setObjectName(QStringLiteral("RumidiaPlayer"));
-        RumidiaPlayer->resize(353, 320);
+        RumidiaPlayer->resize(575, 320);
         centralWidget = new QWidget(RumidiaPlayer);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         titleLabel = new QLabel(centralWidget);
@@ -90,11 +91,12 @@ public:
         tempoSlider->setObjectName(QStringLiteral("tempoSlider"));
         tempoSlider->setGeometry(QRect(130, 40, 22, 101));
         tempoSlider->setMaximum(20);
+        tempoSlider->setPageStep(1);
         tempoSlider->setValue(10);
         tempoSlider->setOrientation(Qt::Vertical);
         tempoLabel = new QLabel(controlBox);
         tempoLabel->setObjectName(QStringLiteral("tempoLabel"));
-        tempoLabel->setGeometry(QRect(120, 20, 31, 16));
+        tempoLabel->setGeometry(QRect(30, 70, 71, 16));
         NOFXCheckBox = new QCheckBox(controlBox);
         NOFXCheckBox->setObjectName(QStringLiteral("NOFXCheckBox"));
         NOFXCheckBox->setGeometry(QRect(20, 20, 91, 16));
@@ -110,6 +112,9 @@ public:
         volSlider->setMaximum(100);
         volSlider->setValue(100);
         volSlider->setOrientation(Qt::Horizontal);
+        dbgBtn = new QPushButton(centralWidget);
+        dbgBtn->setObjectName(QStringLiteral("dbgBtn"));
+        dbgBtn->setGeometry(QRect(400, 260, 121, 23));
         RumidiaPlayer->setCentralWidget(centralWidget);
 
         retranslateUi(RumidiaPlayer);
@@ -131,6 +136,7 @@ public:
         controlBox->setTitle(QApplication::translate("RumidiaPlayer", "Control Panel", 0));
         tempoLabel->setText(QApplication::translate("RumidiaPlayer", "Tempo", 0));
         NOFXCheckBox->setText(QApplication::translate("RumidiaPlayer", "Reverb&Chorus", 0));
+        dbgBtn->setText(QApplication::translate("RumidiaPlayer", "setTempoDebugger", 0));
     } // retranslateUi
 
 };

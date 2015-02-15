@@ -44,6 +44,8 @@ void RumidiaPlayer::UpdateTime()
     static int updatefont=0;
     if (player->isSFLoaded() && ++updatefont&1)//不要太频繁的更新啦..
         ui->SFInsLoadedLabel->setText("SoundFont Loaded:"+player->getSFLoaded());
+    //可能会实时改变的BPM
+    ui->tempoLabel->setText(QString::number(player->getMidiBPM(), 'f', 1));
 
     return;
 }
@@ -71,6 +73,8 @@ void RumidiaPlayer::on_loadFileBtn_clicked()
             ui->progressSlider->setMaximum(pgslen);
         //设置音量
         player->setVol(ui->volSlider->value());
+        //显示Tempo（353
+        ui->tempoLabel->setText(QString::number(player->getMidiBPM(), 'f', 1));
     }
 }
 
@@ -129,4 +133,9 @@ void RumidiaPlayer::on_progressSlider_valueChanged(int value)
 void RumidiaPlayer::on_volSlider_valueChanged(int value)
 {
     player->setVol(value);
+}
+
+void RumidiaPlayer::on_dbgBtn_clicked()
+{
+    player->DBGSetTempo(5);
 }

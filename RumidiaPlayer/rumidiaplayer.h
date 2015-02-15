@@ -37,6 +37,8 @@ private slots:
 
     void on_volSlider_valueChanged(int value);
 
+    void on_dbgBtn_clicked();
+
 private:
     Ui::RumidiaPlayer *ui;
     Player *player;
